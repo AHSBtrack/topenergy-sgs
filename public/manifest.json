@@ -1,0 +1,22 @@
+{
+  "short_name": "TopEnergy",
+  "name": "TopEnergy - Membrana Global SGS",
+  "description": "Plataforma interdimensional de distribuição energética e automação quantitativa.",
+  "icons": [
+    {
+      "src": "https://img.icons8.com/neon/192/flash-on.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://img.icons8.com/neon/512/flash-on.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#0b0c10",
+  "theme_color": "#66fcf1",
+  "display": "standalone",
+  "orientation": "portrait"
+}
