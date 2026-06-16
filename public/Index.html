@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TopEnergy Super App - SGS</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #0b0c10; color: #c5c6c7; padding: 20px; text-align: center; }
+        .container { background: #1f2833; padding: 30px; border-radius: 12px; margin: 20px auto; max-width: 450px; border: 1px solid #45a29e; box-shadow: 0 8px 25px rgba(0,0,0,0.7); }
+        h1 { color: #66fcf1; margin-bottom: 5px; font-weight: 600; }
+        p { color: #45a29e; font-size: 14px; margin-bottom: 25px; }
+        label { display: block; text-align: left; margin: 10px 0 5px 15px; font-weight: bold; font-size: 13px; color: #66fcf1; }
+        input, select { width: 88%; padding: 12px; margin-bottom: 15px; background: #0b0c10; color: #fff; border: 1px solid #45a29e; border-radius: 6px; outline: none; font-size: 15px; }
+        button { background: #66fcf1; color: #0b0c10; border: none; padding: 14px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; width: 95%; font-size: 16px; transition: 0.3s; }
+        button:hover { background: #45a29e; color: #fff; }
+        .section-box { border-top: 2px dashed #45a29e; margin-top: 30px; padding-top: 20px; }
+        .log-box { margin-top: 25px; padding: 15px; background: #0b0c10; border-radius: 6px; border-left: 4px solid #66fcf1; text-align: left; font-family: monospace; font-size: 12px; word-break: break-all; display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>⚡ TopEnergy SGS ⚡</h1>
+        <p>Membrana Energética & Copy Trading Quantitativo</p>
+
+        <div>
+            <label>SGS Wallet ou ID da Indústria</label>
+            <input type="text" id="wallet" placeholder="0x8922...">
+            <label>Energia Injetada (kWh)</label>
+            <input type="number" id="kwh" placeholder="Ex: 450">
+            <button onclick="assinarEGerar()">Registrar na Membrana</button>
+        </div>
+
+        <div class="section-box">
+            <h2 style="color: #66fcf1; font-size: 18px;">Conectar APIs de Trading (Copy Trade)</h2>
+            <label>Selecione a Exchange</label>
+            <select id="exchangeId">
+                <option value="binance">Binance</option>
+                <option value="bingx">BingX</option>
+                <option value="bybit">Bybit</option>
+                <option value="okx">OKX</option>
+            </select>
+            <label>API Key</label>
+            <input type="text" id="apiKey" placeholder="Sua API Key">
+            <label>Secret Key</label>
+            <input type="password" id="secret" placeholder="Sua Secret Key">
+            <button onclick="vincularAPI()" style="background: #ffcc00; color: #000;">Ativar Espelhamento Mestre</button>
+        </div>
+
+        <div id="logPainel" class="log-box"></div>
+    </div>
+
+    <script>
+        async function assinarEGerar() {
+            const walletAddress = document.getElementById('wallet').value;
+            const kwhGenerated = document.getElementById('kwh').value;
+            const logBox = document.getElementById('logPainel');
+            if(!walletAddress || !kwhGenerated) { alert('Preencha os campos!'); return; }
+
+            try {
+                const response = await fetch('/api/energia/gerar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ walletAddress, kwhGenerated })
+                });
+                const dados = await response.json();
+                logBox.style.display = "block";
+                logBox.innerHTML = `<strong>[CERTICHAIN VALIDADO]</strong><br>Hash: ${dados.hashCertificado}<br>Saldo: ${dados.saldoAtualSGS} SGS`;
+            } catch (err) { alert('Erro na conexão.'); }
+        }
+
+        async function vincularAPI() {
+            const exchangeId = document.getElementById('exchangeId').value;
+            const apiKey = document.getElementById('apiKey').value;
+            const secret = document.getElementById('secret').value;
+            const logBox = document.getElementById('logPainel');
+
+            try {
+                const response = await fetch('/api/trading/vincular', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ exchangeId, apiKey, secret, uid: Math.random().toString() })
+                });
+                const dados = await response.json();
+                logBox.style.display = "block";
+                logBox.innerHTML = `<strong style="color:#ffcc00">[SINCRO SINAPSE ATIVA]</strong><br>${dados.status}`;
+            } catch (err) { alert('Erro ao vincular.'); }
+        }
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js');
+            });
+        }
+    </script>
+</body>
+</html>
