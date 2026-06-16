@@ -1,0 +1,16 @@
+{
+  "name": "topenergy-sgs-interdimensional",
+  "version": "3.0.0",
+  "description": "Membrana Global de Energia com Copy Trading CertiChain",
+  "main": "Index.js",
+  "scripts": {
+    "start": "node Index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.2.0",
+    "ccxt": "^4.2.0"
+  },
+  "author": "SGS Core",
+  "license": "MIT"
+}
